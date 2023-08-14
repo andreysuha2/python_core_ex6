@@ -18,5 +18,3 @@ def normalize(text):
         trans_str += tr_ch
     
     return trans_str
-
-word = input('>>> ')
