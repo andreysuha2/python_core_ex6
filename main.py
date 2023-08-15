@@ -6,6 +6,7 @@ import os
 
 if len(argv) < 2:
     print('Param folder is required!')
+    exit()
 
 DEFAULT_PATH = Path(argv[1])
 
@@ -15,6 +16,10 @@ def create_directories(path):
 
         if not Path(folder_path).exists():
             os.mkdir(folder_path)
+
+def create_file_name(path, ext, counter = 0):
+    file_name = f"{path}{ext}" if not counter else f"{path}_{counter}{ext}"
+    return create_file_name(path, ext, counter + 1) if os.path.exists(file_name) else file_name           
 
 def handle_file(path): 
     parent_folder_name = OTHER_FOLDER
@@ -27,10 +32,9 @@ def handle_file(path):
             break
 
     if parent_folder_name:
-        file_name = f"{normalize(file_name)}{path.suffix}"
-        new_path = f"{DEFAULT_PATH}/{parent_folder_name}/{file_name}"
-        os.rename(path, new_path)
-        print(path, '-->', new_path)
+        file_name = create_file_name(f"{DEFAULT_PATH}/{parent_folder_name}/{normalize(file_name)}", path.suffix)
+        os.rename(path, file_name)
+        print(path, '-->', file_name)
 
 def arrange(path):
     if not path.exists():
